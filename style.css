@@ -1,0 +1,275 @@
+:root {
+  --bg-1: #0f1724;
+  --panel: rgba(255, 255, 255, 0.03);
+  --accent: #00e8ff;
+  --muted: #9aa6b2;
+  --card-radius: 14px;
+  --gap: 12px;
+  --btn-bg: linear-gradient(135deg, #32353a, #2a2d31);
+
+  /* responsive sizing */
+  --board-min: 260px;
+  --board-max: 480px;
+  --board-vw: 60vmin;
+}
+
+/* reset + base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  font-family: Inter, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  background: linear-gradient(180deg, #081016, #142027);
+  color: #e6eef8;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+/* page wrapper */
+main {
+  width: 100%;
+  max-width: 880px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 12px;
+}
+
+/* Title */
+h1 {
+  font-size: clamp(1.2rem, 3.6vw, 2.1rem);
+  font-weight: 700;
+  font-family: "Rye", serif;
+  letter-spacing: 0.6px;
+  margin-bottom: 6px;
+  color: transparent;
+  background: linear-gradient(90deg, var(--accent), #7c6bff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-align: center;
+}
+
+/* center container for board */
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+}
+
+/* GAME BOARD: responsive square board */
+.game {
+  /* responsive board width: prefer vw-based but clamp to pixels */
+  width: clamp(var(--board-min), var(--board-vw), var(--board-max));
+  aspect-ratio: 1 / 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: var(--gap);
+  padding: calc(var(--gap) * 0.9);
+  border-radius: var(--card-radius);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(0, 0, 0, 0.04)
+  );
+  box-shadow: 0 10px 30px rgba(2, 6, 23, 0.6);
+  transition: width 220ms ease;
+}
+
+/* BOX: perfect square cells that scale text responsively */
+.box {
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  background: rgba(255, 255, 255, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  font-family: sans-serif;
+  color: white;
+  /* responsive symbol size */
+  font-size: 10vh;
+  aspect-ratio: 1 / 1; /* guarantee square */
+  transition: transform 160ms ease, background 180ms ease, box-shadow 180ms;
+  box-shadow: 0 6px 18px rgba(2, 6, 23, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.02);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* hover / active / focus states */
+.box:hover {
+  transform: translateY(-6px);
+  background: rgba(255, 255, 255, 0.07);
+}
+.box:active {
+  transform: scale(0.98);
+}
+.box:focus {
+  outline: none;
+  box-shadow: 0 0 0 6px rgba(0, 232, 255, 0.09);
+}
+
+/* Buttons */
+#reset-btn,
+#new-btn {
+  appearance: none;
+  border: 0;
+  padding: 12px 18px;
+  border-radius: 12px;
+  background: var(--btn-bg);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+  transition: transform 160ms ease, opacity 160ms ease;
+  min-width: 140px;
+  text-align: center;
+}
+#reset-btn:hover,
+#new-btn:hover {
+  transform: translateY(-4px);
+}
+
+/* Remove the fixed margins you had and center properly */
+#new-btn {
+  margin: 0;
+}
+
+/* Message container — overlay centered and responsive */
+.msg-container {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  background: linear-gradient(
+    180deg,
+    rgba(2, 6, 23, 0.6),
+    rgba(2, 6, 23, 0.85)
+  );
+  z-index: 50;
+  padding: 24px;
+  /* use max-width for the message card inside */
+}
+
+/* create a message card inside overlay so content is centered and contained */
+.msg-card {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(0, 0, 0, 0.05)
+  );
+  border-radius: 12px;
+  padding: 18px 26px;
+  box-shadow: 0 12px 40px rgba(2, 6, 23, 0.6);
+  max-width: min(90vw, 520px);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+/* hidden state */
+.msg-container.hide {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition: all 200ms ease;
+}
+
+/* message text */
+#msg {
+  color: var(--accent);
+  font-size: clamp(1rem, 3.6vw, 1.8rem);
+  font-weight: 800;
+  text-align: center;
+  text-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+}
+
+/* responsive tweaks for smaller screens */
+@media (max-width: 720px) {
+  :root {
+    --gap: 10px;
+  }
+  .game {
+    width: clamp(220px, 72vmin, 420px);
+  }
+  .box {
+    font-size: clamp(2rem, 7vmin, 4rem);
+  }
+  .controls {
+    gap: 10px;
+  }
+  #reset-btn,
+  #new-btn {
+    min-width: 120px;
+    padding: 10px 14px;
+  }
+}
+
+@media (max-width: 420px) {
+  :root {
+    --gap: 8px;
+  }
+  main {
+    padding: 10px;
+    gap: 12px;
+  }
+  .game {
+    width: min(88vmin, 360px);
+  }
+  .box {
+    font-size: clamp(1.6rem, 9vmin, 3.6rem);
+    border-radius: 10px;
+  }
+  .controls {
+    gap: 8px;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+  #reset-btn,
+  #new-btn {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+  }
+  .msg-card {
+    padding: 14px;
+    gap: 10px;
+  }
+  #msg {
+    font-size: clamp(0.95rem, 4.5vw, 1.4rem);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .box,
+  #reset-btn,
+  #new-btn {
+    transition: none;
+    animation: none;
+    transform: none;
+  }
+}
