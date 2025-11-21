@@ -12,3 +12,4 @@ A small, modern, responsive Tic-Tac-Toe game built with plain HTML, CSS, and van
 📱 Fully responsive UI (mobile, tablet, desktop)<br/>
 🎨 Modern styling using CSS Grid & aspect-ratio<br/>
 ⚡ No frameworks — just pure HTML/CSS/JS<br/>
+
